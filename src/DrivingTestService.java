@@ -6,4 +6,8 @@ public class DrivingTestService extends GovernmentServices{
     public String getServiceType(){
         return "Driving Licence";
     }
+    @Override
+    public double getFee() {
+        return 2500;
+    }
 }

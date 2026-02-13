@@ -85,6 +85,7 @@ public class ApplicationManager {
             System.out.println("-----------------------");
         }
     }
+
     public void saveToFile(String filename) {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
@@ -104,6 +105,7 @@ public class ApplicationManager {
             System.out.println("Error saving file.");
         }
     }
+
     public void loadFromFile(String filename) {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -119,7 +121,7 @@ public class ApplicationManager {
                 String serviceName = parts[2];
                 ApplicationStatus status = ApplicationStatus.valueOf(parts[3]);
 
-                Citizen citizen = new Citizen(1,"Uwimana", 12007,2007);
+                Citizen citizen = new Citizen(1, "Uwimana", 12007, 2007);
 
                 GovernmentServices service;
 
@@ -130,7 +132,7 @@ public class ApplicationManager {
                 }
 
                 ServiceApplication app = new ServiceApplication(id, citizen, service);
-                app.SETStatus(status);  // we must create this method
+                app.SETStatus(status);
 
                 applications.put(id, app);
             }
@@ -142,6 +144,57 @@ public class ApplicationManager {
         }
     }
 
+    public void generateRevenueReport(String filename) {
 
+        double totalRevenue = 0;
+        int approvedCount = 0;
 
+        Map<String, Double> revenueByService = new HashMap<>();
+
+        for (ServiceApplication app : applications.values()) {
+
+            if (app.getStatus() == ApplicationStatus.APPROVED) {
+
+                approvedCount++;
+
+                double fee = app.getServices().getFee();
+                totalRevenue += fee;
+
+                String serviceName = app.getServices().getServiceName();
+
+                revenueByService.put(
+                        serviceName,
+                        revenueByService.getOrDefault(serviceName, 0.0) + fee
+                );
+            }
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+
+            writer.println("========= REVENUE REPORT =========");
+            writer.println();
+            writer.println("Total Revenue: " + totalRevenue);
+            writer.println();
+            writer.println("Revenue by Service Type:");
+            writer.println("-----------------------------");
+
+            for (Map.Entry<String, Double> entry : revenueByService.entrySet()) {
+                writer.println(entry.getKey() + " : " + entry.getValue());
+            }
+
+            writer.println();
+            writer.println("Total Approved Applications: " + approvedCount);
+            writer.println("==================================");
+
+            System.out.println("Revenue report generated successfully.");
+
+        } catch (IOException e) {
+            System.out.println("Error generating revenue report.");
+        }
+    }
 }
+
+
+
+
+

@@ -1,2 +1,3 @@
-102,kalisa,BirthCertificate,APPROVED
-104,kalisa,Driving Licence,REJECTED
+101,Uwimana,Driving Licence,APPROVED
+102,Uwimana,Driving Licence,PENDING
+103,Uwimana,Driving Licence,APPROVED

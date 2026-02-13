@@ -12,4 +12,6 @@ double getServiceFee(){
     return serviceFee;
 }
 public abstract String getServiceType();
+
+    public abstract double getFee() ;
 }

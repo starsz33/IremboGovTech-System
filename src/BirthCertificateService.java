@@ -6,5 +6,9 @@ public class BirthCertificateService extends GovernmentServices{
     public String getServiceType(){
         return "BirthCertificate";
     }
+    @Override
+    public double getFee() {
+        return 1500;
+    }
 
 }

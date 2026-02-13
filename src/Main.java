@@ -1,42 +1,46 @@
 public class Main {
+
     public static void main(String[] args) {
-        Citizen citizen=new Citizen(101,"kalisa",120034,2003);
-        Citizen citizen1=new Citizen(105,"Esther",120045,2004);
-        GovernmentServices services=new BirthCertificateService();
-        GovernmentServices services1=new DrivingTestService();
 
-        ServiceApplication app1=new ServiceApplication(102,citizen,services);
-        ServiceApplication app2=new ServiceApplication(104,citizen,services1);
+        ApplicationManager manager = new ApplicationManager();
 
-        ServiceApplication app3=new ServiceApplication(102,citizen1,services);
-        ServiceApplication app4=new ServiceApplication(104,citizen1,services1);
-        System.out.println("before approval");
-        app1.display();
-        app2.display();
+        // Load existing data (if file exists)
+        manager.loadFromFile("Application.txt");
 
-        app1.approve();
-        app2.reject();
+        // Create citizens
+        Citizen citizen = new Citizen(101, "kalisa", 120034, 2003);
+        Citizen citizen1 = new Citizen(102, "Esther", 120045, 2004);
 
-        System.out.println("After changing status ");
-        app1.display();
-        app2.display();
-        ApplicationManager manager=new ApplicationManager();
-        manager.loadFromFile("Applications.txt");
+        // Create services
+        GovernmentServices birthService = new BirthCertificateService();
+        GovernmentServices drivingService = new DrivingTestService();
+
+        // Create applications
+        ServiceApplication app1 = new ServiceApplication(101, citizen, birthService);
+        ServiceApplication app2 = new ServiceApplication(102, citizen, drivingService);
+        ServiceApplication app3 = new ServiceApplication(103, citizen1, birthService);
+
+        // Add applications to manager
+        manager.addApplication(app1);
+        manager.addApplication(app2);
+        manager.addApplication(app3);
+
+        // Approve some applications USING MANAGER
         try {
-            manager.approveApplication(999);
+            manager.approveApplication(101);
+            manager.approveApplication(103);
         } catch (ApplicationNotFoundException e) {
             System.out.println(e.getMessage());
         }
 
-        manager.addApplication(app1);
-        manager.addApplication(app2);
-
+        // Display clean output
+        System.out.println("\n===== CURRENT APPLICATIONS =====\n");
         manager.displayAllApplications();
 
-        System.out.println("\nAfter Approval:\n");
-
-        manager.displayAllApplications();
+        // Save applications
         manager.saveToFile("Application.txt");
 
+        // Generate revenue report
+        manager.generateRevenueReport("RevenueReport.txt");
     }
 }
