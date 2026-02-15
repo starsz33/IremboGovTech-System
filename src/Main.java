@@ -1,46 +1,92 @@
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
 
+        Scanner scanner = new Scanner(System.in);
         ApplicationManager manager = new ApplicationManager();
 
-        // Load existing data (if file exists)
         manager.loadFromFile("Application.txt");
 
-        // Create citizens
-        Citizen citizen = new Citizen(101, "kalisa", 120034, 2003);
-        Citizen citizen1 = new Citizen(102, "Esther", 120045, 2004);
+        boolean running = true;
 
-        // Create services
-        GovernmentServices birthService = new BirthCertificateService();
-        GovernmentServices drivingService = new DrivingTestService();
+        while (running) {
 
-        // Create applications
-        ServiceApplication app1 = new ServiceApplication(101, citizen, birthService);
-        ServiceApplication app2 = new ServiceApplication(102, citizen, drivingService);
-        ServiceApplication app3 = new ServiceApplication(103, citizen1, birthService);
+            System.out.println("\n===== GOVERNMENT SERVICE SYSTEM =====");
+            System.out.println("1. Apply for Birth Certificate");
+            System.out.println("2. Apply for Driving Test");
+            System.out.println("3. Approve Application");
+            System.out.println("4. Display Applications");
+            System.out.println("5. Exit");
+            System.out.print("Choose option: ");
 
-        // Add applications to manager
-        manager.addApplication(app1);
-        manager.addApplication(app2);
-        manager.addApplication(app3);
+            int choice = scanner.nextInt();
 
-        // Approve some applications USING MANAGER
-        try {
-            manager.approveApplication(101);
-            manager.approveApplication(103);
-        } catch (ApplicationNotFoundException e) {
-            System.out.println(e.getMessage());
+            switch (choice) {
+
+                case 1:
+                case 2:
+
+                    System.out.print("Enter Application ID: ");
+                    int appId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Enter Citizen Name: ");
+                    String CitizenName = scanner.nextLine();
+
+                    System.out.print("Enter National ID: ");
+                    String nationalId = scanner.nextLine();
+
+                    System.out.print("Enter Year of Birth: ");
+                    int year = scanner.nextInt();
+
+                    Citizen citizen = new Citizen(CitizenName, nationalId);
+
+                    GovernmentServices service;
+
+                    if (choice == 1) {
+                        service = new BirthCertificateService();
+                    } else {
+                        service = new DrivingTestService();
+                    }
+
+                    ServiceApplication app =
+                            new ServiceApplication(appId, citizen, service);
+
+                    manager.addApplication(app);
+
+                    break;
+
+                case 3:
+
+                    System.out.print("Enter Application ID to approve: ");
+                    int approveId = scanner.nextInt();
+
+                    try {
+                        manager.approveApplication(approveId);
+                    } catch (ApplicationNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    break;
+
+                case 4:
+                    manager.displayAllApplications();
+                    break;
+
+                case 5:
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("Invalid option.");
+            }
         }
 
-        // Display clean output
-        System.out.println("\n===== CURRENT APPLICATIONS =====\n");
-        manager.displayAllApplications();
-
-        // Save applications
         manager.saveToFile("Application.txt");
-
-        // Generate revenue report
         manager.generateRevenueReport("RevenueReport.txt");
+
+        System.out.println("System closed. Data saved.");
     }
 }

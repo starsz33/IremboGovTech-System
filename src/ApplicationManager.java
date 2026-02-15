@@ -121,7 +121,7 @@ public class ApplicationManager {
                 String serviceName = parts[2];
                 ApplicationStatus status = ApplicationStatus.valueOf(parts[3]);
 
-                Citizen citizen = new Citizen(1, "Uwimana", 12007, 2007);
+                Citizen citizen = new Citizen("Uwimana", "1234567777777778");
 
                 GovernmentServices service;
 

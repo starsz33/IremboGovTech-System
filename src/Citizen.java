@@ -1,25 +1,46 @@
 public class Citizen {
-    private int citizenId;
     private String citizenName;
-    private int nationalId;
-    private int birthyear;
-    Citizen(int citizenId,String citizenName,int nationalId,int birthyear)
-    {
-        this.citizenId=citizenId;
-        this.citizenName=citizenName;
-        this.nationalId=nationalId;
-        this.birthyear=birthyear;
+    private String nationalId;
+
+    public Citizen(String citizenName, String nationalId) {
+        this.citizenName = citizenName;
+
+        if (nationalId.length() == 16) {
+            this.nationalId = nationalId;
+        } else {
+            System.out.println("National ID is not valid");
+        }
     }
-    int getCitizenId(){
-        return citizenId;
+
+    public Citizen() {
+
     }
-    String getCitizenName(){
+
+    String getCitizenName() {
         return citizenName;
     }
-    int getNationalId(){
+
+    void setCitizenName(String citizenName) {
+        this.citizenName = citizenName;
+    }
+
+    String getNationalId() {
         return nationalId;
     }
-    int getYear(){
-        return birthyear;
+
+    void setNationalId(String nationalId) {
+        if (nationalId.length() == 16) {
+            this.nationalId = nationalId;
+        } else {
+            System.out.println("National ID is not valid");
+        }
+    }
+    @Override
+    public String toString() {
+        return "{" +
+                "Name:'" + citizenName+ '\'' +
+                ", with the National ID:'" + nationalId + '\'' +
+                '}';
     }
 }
+
